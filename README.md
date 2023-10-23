@@ -24,3 +24,14 @@ conda activate turb
 ```
 conda deactivate
 ```
+
+## Dataset
+### Generate
+```
+python ./Data_MRW.npz
+```
+
+### Explore
+```
+jupyter notebook Data_MRW.ipynb
+```
