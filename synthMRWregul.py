@@ -1,6 +1,5 @@
 import numpy as np
 import torch
-# import matplotlib.pyplot as plt
 
 
 def synthMRWregul(N,c1,c2,L,epsilon=0.2,win=1):
@@ -123,7 +122,7 @@ for ic1 in range(len(c1s)):
                 epsilon=epsilons[iepsilon]
                 mrw[ic1,ic2,iL,iepsilon,:]=synthMRWregul(N,c1,c2,L,epsilon,win)
 
-np.savez('Data_MRW.npz',mrw=mrw,c1s=c1s,c2s=c2s,Ls=Ls,epsilons=epsilons,N=N,win=win)
+np.savez('Pre_MRW.npz',mrw=mrw,c1s=c1s,c2s=c2s,Ls=Ls,epsilons=epsilons,N=N,win=win)
   
 #%% Cette fonction vous permet d'etudier la variance, skewness et flatness des increments du processus
 
