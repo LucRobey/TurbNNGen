@@ -28,10 +28,20 @@ conda deactivate
 ## Dataset
 ### Generate
 ```
-python ./Data_MRW.npz
+python ./synthMRWregul.py
+```
+
+### Preprocess
+```
+python ./preprocess_data.py
 ```
 
 ### Explore
+Before preprocessing:
 ```
-jupyter notebook Data_MRW.ipynb
+jupyter notebook Pre_MRW.ipynb
+```
+After preprocessing:
+```
+jupyter notebook MRW.ipynb
 ```
