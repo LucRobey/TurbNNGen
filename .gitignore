@@ -160,4 +160,4 @@ cython_debug/
 #.idea/
 
 # Data
-Data_MRW.npz
+*.npz
