@@ -1,20 +1,23 @@
 # -*- coding: utf-8 -*-
 from torch import nn
 
-class CNN(nn.Module):
+class CNNClassifier(nn.Module):
     """
-    CNN Model for predicting the following 4 turbulence statistiques:
-    * L: Large scale delimiter 
-    * eta: Small scale delimiter
-        Dissipative range | eta | Inertial range | L | Integral range
-    * H: Hurst exponent
-    * c1 : Gamma
+    CNN Model for classifing turbulence flow velocity as one 
+    of 400 classes: (L, eta, H, c1)
+        * L: Large scale delimiter (of the integral range)
+            In [1000 2000 3000 4000 5000] 
+        * eta: Small scale delimiter (of the dissipative range)
+            In [0.5 1.5 2.5 3.5 4.5]
+        * H: Hurst exponent 
+            In [0.22, 0.44, 0.66, 0.88]
+        * c1: -Gamma^2 (Gamma is the intermitence parameter) 
+            In [-0.02, -0.04, -0.06, -0.08]
     """
     def __init__(self):
         super().__init__()
         self.avgpool = nn.AvgPool1d(2, ceil_mode=False)
         self.avgpoolc = nn.AvgPool1d(2, ceil_mode=True)
-        self.upsample = nn.Upsample(scale_factor=2, mode='linear')
 
         self.cnn1 = nn.Sequential( 
             nn.Conv1d(1, 16, kernel_size = 1, stride = 1, padding = 0, bias = False),
@@ -54,7 +57,7 @@ class CNN(nn.Module):
         
         self.flatten = nn.Flatten()
 
-        self.dense = nn.LazyLinear(4)
+        self.dense = nn.LazyLinear(400)
         
     def forward(self, z):    
         residual1  = self.cnn1(z)
