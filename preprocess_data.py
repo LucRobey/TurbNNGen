@@ -26,7 +26,7 @@ def preprocess_data(pre_mrw_path, mrw_path):
                     stats = {}
                     stats[ctes.L] = Ls[iL]
                     stats[ctes.ETA] = epsilons[iepsilon]
-                    stats[ctes.H] = c1s[ic1] + c2s[ic2] 
+                    stats[ctes.H] = np.round(c1s[ic1] + c2s[ic2], 2) # To avoid sum error
                     stats[ctes.C1] = (-1) * c2s[ic2]
 
                     S[ic1, ic2, iL, iepsilon] = np.array([stats[label] for label in S_LABELS])
