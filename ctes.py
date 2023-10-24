@@ -1,0 +1,16 @@
+MRW = "mrw"
+C1S = "c1s"
+C2S = "c2s"
+LS = "Ls"
+EPSILONS = "epsilons"
+N = "N"
+WIN = "win"
+
+L = "L"
+ETA = "eta"
+H = "H"
+C1 = "c1"
+
+X = "X"
+S = "S"
+S_LABELS = "S_LABELS"
