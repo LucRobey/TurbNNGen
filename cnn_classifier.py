@@ -1,4 +1,5 @@
 from cnn_base import CNNBase
+import num_ctes as nctes
 
 class CNNClassifier(CNNBase):
     """
@@ -14,4 +15,4 @@ class CNNClassifier(CNNBase):
             In [-0.02, -0.04, -0.06, -0.08]
     """
     def __init__(self):
-        super().__init__(400)
+        super().__init__(input_size=nctes.N, output_size=400)

@@ -1,4 +1,5 @@
 from cnn_base import CNNBase
+import num_ctes as nctes
 
 class CNNRegressor(CNNBase):
     """
@@ -13,5 +14,5 @@ class CNNRegressor(CNNBase):
         * c1: -Gamma^2 (Gamma is the intermitence parameter) 
             In [-0.02 -0.04 -0.06 -0.08]
     """
-    def __init__(self):
-        super().__init__(4)
+    def __init__(self, input_size=nctes.N):
+        super().__init__(input_size=input_size, output_size=4)
