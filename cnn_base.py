@@ -72,11 +72,9 @@ class CNNBase(nn.Module):
             nn.BatchNorm1d(256),
             nn.ReLU(True),
             )
-        len64 = np.floor((len16 + 2*0 - 1*(64 - 1) - 1)/1 + 1) # cnn64
+        len64 = np.floor((len32 + 2*0 - 1*(64 - 1) - 1)/1 + 1) # cnn64
         
         self.flatten = nn.Flatten()
-
-        print(input_size, len1, len2, len4, len8, len16, len32, len64, len64*256)
 
         self.dense = nn.Linear(int(len64*256), output_size)
 
@@ -85,40 +83,31 @@ class CNNBase(nn.Module):
     def forward(self, z):    
         residual1  = self.cnn1(z)
         out = residual1 #= out->  size
-        print("shape1", out.shape)
 
         residual2  = self.cnn2(out)
         out = residual2 #= out -> size/2
         out = self.avgpoolc(out)
-        print("shape2", out.shape)
 
         residual4  = self.cnn4(out)
         out = residual4 #= out ->size/4
         out = self.avgpoolc(out)
-        print("shape4", out.shape)
 
         residual8  = self.cnn8(out)
         out = residual8 #= out -> size=8
         out = self.avgpoolc(out)
-        print("shape8", out.shape)
 
         residual16  = self.cnn16(out)
         out = residual16 #= out -> size/16
         out = self.avgpoolc(out)
-        print("shape16", out.shape)
 
         residual32  = self.cnn32(out)
         out = residual32 #= out size/32
         out = self.avgpoolc(out)
-        print("shape32", out.shape)
 
         out  = self.cnn64(out)
-        print("shape64", out.shape)
 
         out = self.flatten(out)
-        print("shapeFlatten", out.shape)
 
         out = self.dense(out)
-        print("shapeDense")
         
         return out
