@@ -1,13 +1,13 @@
 from torch.utils.data import Dataset
 import numpy as np
 import ctes.num_ctes as nctes
-import ctes
+import ctes.str_ctes as sctes
 
 class RegressionDataset(Dataset):
     def __init__(self,  mrw_path, transform=None, sample_size=nctes.N):
         data = np.load(mrw_path)
-        self.X = data[ctes.X]
-        self.Y = data[ctes.S]
+        self.X = data[sctes.X]
+        self.Y = data[sctes.Y]
         self.transform = transform
         self.sample_size = int(sample_size)
 
