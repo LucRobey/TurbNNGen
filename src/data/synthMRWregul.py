@@ -15,9 +15,9 @@ def synthMRWregul(N,c1,c2,L,epsilon=0.2,win=1):
         c2 : parameter of intermittency
         epsilon : size of the small-scale regularization (typically epsilon=2)
               Default value is 0.2)
-         L : size of the integral scale. L must verify L<N/16. 
-              Default value is N/16)
-         win : type of the large scale regularization function
+        L : size of the integral scale. L must verify L<N/16. 
+            Default value is N/16)
+        win : type of the large scale regularization function
               if win==1 : gaussian function
               if win==2 : bump function
               Defaultvalue is 1.
