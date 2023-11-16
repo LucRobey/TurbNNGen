@@ -52,4 +52,4 @@ def training(n_epochs, train_loader, valid_loader, model, criterion, optimizer, 
             torch.save(model.state_dict(), save_path)
             valid_loss_min = valid_loss
       
-  return train_losses, valid_losses  
+    return train_losses, valid_losses  
