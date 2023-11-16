@@ -4,15 +4,15 @@ import numpy as np
 class CNNBase(nn.Module):
     """
     CNN Model for classifing turbulence flow velocity statistics: 
-    (L, eta, H, c1)
-        * L: Large scale delimiter (of the integral range)
-            In [1000 2000 3000 4000 5000] 
-        * eta: Small scale delimiter (of the dissipative range)
+    (c1, c2, L, epsilon).
+        c1 : Parameter of long-range dependance
+            In [0.2 0.4 0.6 0.8]
+        c2 : Parameter of intermittency
+            In [0.02 0.04 0.06 0.08]
+        epsilon : Size of the small-scale regularization
             In [0.5 1.5 2.5 3.5 4.5]
-        * H: Hurst exponent 
-            In [0.22, 0.44, 0.66, 0.88]
-        * c1: -Gamma^2 (Gamma is the intermitence parameter) 
-            In [-0.02, -0.04, -0.06, -0.08]
+        L : Size of the integral scale.
+            In [1000 2000 3000 4000 5000] 
     """
     def __init__(self, input_size, output_size):
         super().__init__()
@@ -80,7 +80,8 @@ class CNNBase(nn.Module):
 
         
         
-    def forward(self, z):    
+    def forward(self, z):
+        print(f"cnn_base 84: ", z.shape)
         residual1  = self.cnn1(z)
         out = residual1 #= out->  size
 
