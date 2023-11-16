@@ -1,1 +1,2 @@
 matplotlib==3.8.1
+notebook==7.0.6
