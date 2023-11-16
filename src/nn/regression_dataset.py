@@ -15,8 +15,8 @@ class RegressionDataset(Dataset):
         return self.X.shape[0]
 
     def __getitem__(self, idx):
-        x = self.X[idx, :self.sample_size]
-        y = self.Y[idx, :]
+        x = self.X[idx:idx+1, :self.sample_size]
+        y = self.Y[idx:idx+1, :]
         if self.transform:
             x = self.transform(x)
         return x, y
