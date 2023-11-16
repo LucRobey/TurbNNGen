@@ -1,10 +1,12 @@
 from torch.utils.data import Dataset
+from src.nn.to_tensor import ToTensor
 import numpy as np
 import src.ctes.num_ctes as nctes
 import src.ctes.str_ctes as sctes
 
+
 class RegressionDataset(Dataset):
-    def __init__(self,  mrw_path, transform=None, sample_size=nctes.LEN_SAMPLE):
+    def __init__(self,  mrw_path, transform=ToTensor(), sample_size=nctes.LEN_SAMPLE):
         data = np.load(mrw_path)
         self.X = data[sctes.X]
         self.Y = data[sctes.Y]
