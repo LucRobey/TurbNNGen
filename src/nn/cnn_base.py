@@ -81,7 +81,6 @@ class CNNBase(nn.Module):
         
         
     def forward(self, z):
-        print(f"cnn_base 84: ", z.shape)
         residual1  = self.cnn1(z)
         out = residual1 #= out->  size
 
