@@ -74,7 +74,7 @@ class CNNBase(nn.Module):
             )
         len64 = np.floor((len32 + 2*0 - 1*(64 - 1) - 1)/1 + 1) # cnn64
         
-        self.flatten = nn.Flatten()
+        self.flatten = nn.Flatten() # Some Conv Transpose 
 
         self.dense = nn.Linear(int(len64*256), output_size)
 

@@ -1,6 +1,6 @@
 from torch.utils.data import Dataset
 import numpy as np
-import num_ctes as nctes
+import ctes.num_ctes as nctes
 import ctes
 
 class RegressionDataset(Dataset):
@@ -18,5 +18,5 @@ class RegressionDataset(Dataset):
         x = self.X[idx, :self.sample_size]
         y = self.Y[idx, :]
         if self.transform:
-            sample = self.transform(sample)
+            x = self.transform(x)
         return x, y

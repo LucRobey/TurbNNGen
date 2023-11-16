@@ -1,5 +1,5 @@
 from cnn_base import CNNBase
-import num_ctes as nctes
+import ctes.num_ctes as nctes
 
 class CNNClassifier(CNNBase):
     """
