@@ -6,7 +6,15 @@ projet ProCom A3 imt
 
 ## Installation
 ```
-conda create --name turb --file ENV.txt
+conda create --name turbmm python=3.11
+```
+
+```
+conda activate turbnn
+```
+
+```
+conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
 ```
 
 ### Add new dependencies
@@ -17,7 +25,7 @@ conda list --explicit > ENV.txt
 
 ### Activate environnement
 ```
-conda activate turb
+conda activate turbnn
 ```
 
 ### Deactivate environnement
@@ -30,7 +38,6 @@ conda deactivate
 ```
 python ./data/generate_data.py
 ```
-
 
 ### Explore
 ```
