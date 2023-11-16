@@ -5,23 +5,33 @@ projet ProCom A3 imt
 * conda >= 23.5.2
 
 ## Installation
+### Raw installation commands
 ```
-conda create --name turbmm python=3.11
+conda create --name turb python=3.11 --yes
 ```
-
 ```
-conda activate turbnn
+conda activate turb
 ```
-
 ```
-conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia --yes
+```
+```
+conda install conda_requirements --yes
+```
+```
+pip install -r pip_requirements.txt
+```
+```
+python -m pip install -e .
+```
+### Windows installation script
+```
+win_install.bat
 ```
 
 ### Add new dependencies
-After adding new depedencies, make sure to save new environnement packages executing the following line:
-```
-conda list --explicit > ENV.txt
-```
+Add new dependencies installed with `conda` to `conda-requirements.txt`  
+Add new dependencies installed with `pip` to `pip-requirements.txt`
 
 ### Activate environnement
 ```
@@ -38,6 +48,7 @@ conda deactivate
 ```
 python ./data/generate_data.py
 ```
+Note: Modify path in the file if needed
 
 ### Explore
 ```
