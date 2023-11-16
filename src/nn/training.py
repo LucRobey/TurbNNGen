@@ -1,3 +1,4 @@
+from tqdm import tqdm
 import torch 
 import numpy as np
 
@@ -12,9 +13,9 @@ def training(n_epochs, train_loader, valid_loader, model, criterion, optimizer, 
       
       # train the model
       model.train() # prep model for training
-      for data, label in train_loader:
+      for data, label in tqdm(train_loader):
           data = data.to(device=device, dtype=torch.float32)
-          label = label.to(device=device, dtype=torch.long)
+          label = label.to(device=device, dtype=torch.float32)
           optimizer.zero_grad()
           output = model(data)
           loss = criterion(output, label)
