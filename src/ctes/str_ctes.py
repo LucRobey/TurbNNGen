@@ -26,4 +26,5 @@ BATCH_SIZE = "batch_size"
 CRITERION = "criterion"
 OPTIMIZER = "optimizer"
 LR = "lr"
+SEED = "seed"
 
