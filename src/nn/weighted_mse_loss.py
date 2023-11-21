@@ -8,3 +8,9 @@ class WeightedMSELoss(nn.Module):
 
     def forward(self, inputs, targets):
         return torch.mean(self.weights * (inputs - targets)**2)
+
+    def __str__(self):
+        return f"{self.__class__.__name__}(weights={self.weights})"
+    
+    def __repr__(self):
+        return str(self)
