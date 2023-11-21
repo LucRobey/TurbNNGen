@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 def plot_losses(n_epochs, losses, legends):
-    epochs = range(n_epochs)
+    epochs = range(1, n_epochs + 1)
     for i in range(len(losses)):
         curr_losses = losses[i]
         curr_legend = legends[i]
@@ -11,5 +11,6 @@ def plot_losses(n_epochs, losses, legends):
     plt.xlabel("Epoch")
     plt.ylabel("Loss")
     plt.legend()
+    plt.grid()
 
 
