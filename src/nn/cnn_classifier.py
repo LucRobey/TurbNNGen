@@ -1,4 +1,4 @@
-from cnn_base import CNNBase
+from src.nn.cnn_base import CNNBase
 import ctes.num_ctes as nctes
 
 class CNNClassifier(CNNBase):
