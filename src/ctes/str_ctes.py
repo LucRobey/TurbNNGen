@@ -17,3 +17,13 @@ Y_LABELS = "Y_LABELS"
 TRAIN = "train"
 VAL = "val"
 TEST = "test"
+
+LEN = "len"
+TEST_SIZE = "test_size"
+VALID_SIZE = "valid_size"
+EPOCHS = "epochs"
+BATCH_SIZE = "batch_size"
+CRITERION = "criterion"
+OPTIMIZER = "optimizer"
+LR = "lr"
+
