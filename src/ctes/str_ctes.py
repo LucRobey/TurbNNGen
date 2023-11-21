@@ -13,3 +13,7 @@ EPSILON = "EPSILON"
 X = "X"
 Y = "Y"
 Y_LABELS = "Y_LABELS"
+
+TRAIN = "train"
+VAL = "val"
+TEST = "test"
