@@ -5,22 +5,48 @@ projet ProCom A3 imt
 * conda >= 23.5.2
 
 ## Installation
+
 ### Raw installation commands
+#### 0.
+Clean space for the project:
 ```
-conda create --name turb python=3.11 --yes
+conda clean --all
 ```
+
+Change folder for downloading packages:
 ```
-conda activate turb
+conda config --add pkgs_dirs <path-downloading-dir>
 ```
+
+#### 1.
+```
+conda create --name <env-name> python=3.11 --yes
+```
+or 
+```
+conda create --prefix <env-installation-path> python=3.11 --yes
+```
+#### 2.
+```
+conda activate <env-name>
+```
+or 
+```
+conda activate <env-installation-path>
+```
+#### 3.
 ```
 conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia --yes
 ```
+#### 4.
 ```
-conda install conda_requirements --yes
+conda install --file conda_requirements.txt --yes
 ```
+#### 5.
 ```
 pip install -r pip_requirements.txt
 ```
+#### 6.
 ```
 python -m pip install -e .
 ```
@@ -29,13 +55,25 @@ python -m pip install -e .
 win_install.bat
 ```
 
+### Linux installation script
+```
+chmod u+x lin_install.sh
+```
+```
+lin_install.sh --name <env-name>
+```
+or
+```
+lin_install.sh --prefix <env-installation-path>
+```
+
 ### Add new dependencies
 Add new dependencies installed with `conda` to `conda-requirements.txt`  
 Add new dependencies installed with `pip` to `pip-requirements.txt`
 
 ### Activate environnement
 ```
-conda activate turbnn
+conda activate turb
 ```
 
 ### Deactivate environnement
@@ -43,14 +81,27 @@ conda activate turbnn
 conda deactivate
 ```
 
+## Remote Connection
+### Terminal 1
+```
+ssh <user-name>@<computer-name>
+```
+```
+source ~/miniconda3/bin/activate <env-name>
+```
+```
+source ~/miniconda3/bin/activate <env-installation-path>
+```
+### Terminal 2
+
 ## Dataset
 ### Generate
 ```
-python ./data/generate_data.py
+python ./src/data/generate_data.py
 ```
 Note: Modify path in the file if needed
 
 ### Explore
 ```
-jupyter notebook ./data/MRW.ipynb
+jupyter notebook ./src/data/MRW.ipynb
 ```
