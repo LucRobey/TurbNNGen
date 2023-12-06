@@ -164,3 +164,6 @@ MRW.npz
 
 # Images
 *.png
+
+# Temporal
+tmp/
