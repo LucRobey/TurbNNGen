@@ -83,15 +83,34 @@ conda deactivate
 
 ## Remote Connection
 ### Terminal 1
+#### 1.
 ```
 ssh <user-name>@<computer-name>
 ```
+#### 2.
 ```
 source ~/miniconda3/bin/activate <env-name>
 ```
+or
 ```
 source ~/miniconda3/bin/activate <env-installation-path>
 ```
+#### 3.
+```
+jupyter notebook --no-browser --port=8888
+```
+### Terminal 2
+```
+ssh -N -L localhost:1234:localhost:8888 <user-name>@<computer-name>
+```
+### Browser
+#### 1.
+```
+http://localhost:1234
+```
+#### 2.
+Copy the token shown in `Terminal 1`
+
 ### Terminal 2
 
 ## Dataset
