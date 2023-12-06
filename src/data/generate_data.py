@@ -1,4 +1,5 @@
 from src.data.synthMRWregul import synthMRWregul
+from src.data.normalizer import normalize
 import src.ctes.str_ctes as sctes
 import numpy as np
 
@@ -48,3 +49,4 @@ def generate_data(path):
 
 if __name__ == "__main__":
     generate_data("data/MRW.npz")
+    normalize("data/MRW.npz" , save_scaler)
