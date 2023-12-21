@@ -85,7 +85,7 @@ conda deactivate
 ### Terminal 1
 #### 1.
 ```
-ssh <user-name>@<computer-name>
+ssh <user-name>@<computer-name>.imta.fr
 ```
 #### 2.
 ```
