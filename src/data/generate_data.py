@@ -2,6 +2,7 @@ from src.data.synthMRWregul import synthMRWregul
 from src.data.normalizer import normalize
 import src.ctes.str_ctes as sctes
 import numpy as np
+import argparse
 
 
 def generate_data(path):
@@ -48,5 +49,9 @@ def generate_data(path):
              c1s=c1s, c2s=c2s, Ls=Ls, epsilons=epsilons)
 
 if __name__ == "__main__":
-    generate_data("data/MRW.npz")
-    normalize("data/MRW.npz" , save_scaler)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--datapath", type=str, default="data/MRW.npz", help="Path to save data")
+    parser.add_argument("--scalerpath", type=str, default="data/scaler.joblib", help="Path to save normalizer")
+    args = parser.parse_args()
+    generate_data(args.datapath)
+    normalize(args.datapath , args.scalerpath)
