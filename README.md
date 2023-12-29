@@ -111,8 +111,6 @@ http://localhost:1234
 #### 2.
 Copy the token shown in `Terminal 1`
 
-### Terminal 2
-
 ## Dataset
 ### Generate
 ```
