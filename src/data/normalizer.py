@@ -2,7 +2,6 @@
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 import joblib
-scaler = MinMaxScaler()
 
 #=================================================PRE-PROCESSING
 """
@@ -11,6 +10,7 @@ scaler_save_name : nom du fichier contenant la mémoire du scaler
 
 """
 def normalize(filename , scaler_save_name):
+    scaler = MinMaxScaler()
     print("\nOn essaie d'ouvir le fichier :"+filename)
     DATA = dict(np.load(filename))
     print("succès")
