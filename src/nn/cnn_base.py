@@ -78,30 +78,25 @@ class CNNBase(nn.Module):
 
         self.dense = nn.Linear(int(len64*256), output_size)
 
+        self.softplus = nn.Softplus()
         
         
     def forward(self, z):
-        residual1  = self.cnn1(z)
-        out = residual1 #= out->  size
+        out  = self.cnn1(z)
 
-        residual2  = self.cnn2(out)
-        out = residual2 #= out -> size/2
+        out = self.cnn2(out)
         out = self.avgpoolc(out)
 
-        residual4  = self.cnn4(out)
-        out = residual4 #= out ->size/4
+        out = self.cnn4(out)
         out = self.avgpoolc(out)
 
-        residual8  = self.cnn8(out)
-        out = residual8 #= out -> size=8
+        out = self.cnn8(out)
         out = self.avgpoolc(out)
 
-        residual16  = self.cnn16(out)
-        out = residual16 #= out -> size/16
+        out = self.cnn16(out)
         out = self.avgpoolc(out)
 
-        residual32  = self.cnn32(out)
-        out = residual32 #= out size/32
+        out = self.cnn32(out)
         out = self.avgpoolc(out)
 
         out  = self.cnn64(out)
@@ -109,5 +104,7 @@ class CNNBase(nn.Module):
         out = self.flatten(out)
 
         out = self.dense(out)
+
+        out = self.softplus(out)
         
         return out
