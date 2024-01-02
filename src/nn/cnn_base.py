@@ -73,10 +73,69 @@ class CNNBase(nn.Module):
             nn.ReLU(True),
             )
         len64 = np.floor((len32 + 2*0 - 1*(64 - 1) - 1)/1 + 1) # cnn64
-        
-        self.flatten = nn.Flatten() # Some Conv Transpose 
+        print(f"{len64 = }")
 
-        self.dense = nn.Linear(int(len64*256), output_size)
+        self.cnntrans256 = nn.Sequential(
+            nn.ConvTranspose1d(256, 256, kernel_size = 3, stride = 1, padding = 1, bias = False),
+            nn.BatchNorm1d(256),
+            nn.ReLU(True),
+            )
+        lenTrans256 = (len64 - 1)*1 - 2*1 + 1*(3 - 1) + 0 + 1
+        print(f"{lenTrans256 = }")
+
+        self.cnntrans128 = nn.Sequential(
+            nn.ConvTranspose1d(256, 128, kernel_size = 3, stride = 1, padding = 1, bias = False),
+            nn.BatchNorm1d(128),
+            nn.ReLU(True),
+            )
+        lenTrans128 = (lenTrans256 - 1)*1 - 2*1 + 1*(3 - 1) + 0 + 1
+        print(f"{lenTrans128 = }")
+
+        self.cnntrans64 = nn.Sequential(
+            nn.ConvTranspose1d(128, 64, kernel_size = 3, stride = 1, padding = 1, bias = False),
+            nn.BatchNorm1d(64),
+            nn.ReLU(True),
+            )
+        lenTrans64 = (lenTrans128 - 1)*1 - 2*1 + 1*(3 - 1) + 0 + 1
+        print(f"{lenTrans64 = }")
+
+        self.cnntrans32 = nn.Sequential(
+            nn.ConvTranspose1d(64, 32, kernel_size = 3, stride = 1, padding = 1, bias = False),
+            nn.BatchNorm1d(32),
+            nn.ReLU(True),
+            )
+        lenTrans32 = (lenTrans64 - 1)*1 - 2*1 + 1*(3 - 1) + 0 + 1
+        print(f"{lenTrans32 = }")
+        
+        self.cnntrans16 = nn.Sequential(
+            nn.ConvTranspose1d(32, 16, kernel_size = 3, stride = 1, padding = 1, bias = False),
+            nn.BatchNorm1d(16),
+            nn.ReLU(True),
+            )
+        lenTrans16 = (lenTrans32 - 1)*1 - 2*1 + 1*(3 - 1) + 0 + 1
+        print(f"{lenTrans16 = }")
+
+        self.cnntrans8 = nn.Sequential(
+            nn.ConvTranspose1d(16, 8, kernel_size = 3, stride = 1, padding = 1, bias = False),
+            nn.BatchNorm1d(8),
+            nn.ReLU(True),
+            )
+        lenTrans8 = (lenTrans16 - 1)*1 - 2*1 + 1*(3 - 1) + 0 + 1
+        print(f"{lenTrans8 = }")
+        
+        self.cnntrans4 = nn.Sequential(
+            nn.ConvTranspose1d(8, 4, kernel_size = 3, stride = 1, padding = 1, bias = False),
+            nn.BatchNorm1d(4),
+            nn.ReLU(True),
+            )
+        lenTrans4 = (lenTrans8 - 1)*1 - 2*1 + 1*(3 - 1) + 0 + 1
+        print(f"{lenTrans4 = }")
+
+        self.flatten = nn.Flatten()
+
+        print(f"{int(lenTrans4*4) = }")
+        # self.dense = nn.Linear(int(len64*256), output_size)
+        self.dense = nn.Linear(int(lenTrans4*4), output_size)
 
         self.softplus = nn.Softplus()
         
@@ -99,10 +158,24 @@ class CNNBase(nn.Module):
         out = self.cnn32(out)
         out = self.avgpoolc(out)
 
-        out  = self.cnn64(out)
-
+        out = self.cnn64(out)
+        print(out.shape)
+        out = self.cnntrans256(out)
+        print(out.shape)
+        out = self.cnntrans128(out)
+        print(out.shape)
+        out = self.cnntrans64(out)
+        print(out.shape)
+        out = self.cnntrans32(out)
+        print(out.shape)
+        out = self.cnntrans16(out)
+        print(out.shape)
+        out = self.cnntrans8(out)
+        print(out.shape)
+        out = self.cnntrans4(out)
+        print(out.shape)
         out = self.flatten(out)
-
+        print(out.shape)
         out = self.dense(out)
 
         out = self.softplus(out)
