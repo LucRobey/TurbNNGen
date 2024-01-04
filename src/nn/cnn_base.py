@@ -4,20 +4,46 @@ import numpy as np
 class ConvBlockBuilder():
     @classmethod
     def build(cls, in_size, in_ch, out_ch, kernel_size):
-        stride  = 1
-        padding = 0
-        bias    = False
-        block   = nn.Sequential( 
+        stride      = 1
+        padding     = 0
+        bias        = False
+        dilation  = 1
+        block  = nn.Sequential( 
             nn.Conv1d(in_ch, out_ch, 
                       kernel_size = kernel_size, 
                       stride      = stride, 
                       padding     = padding, 
-                      bias        = bias),
+                      bias        = bias,
+                      dilation  = dilation),
             nn.BatchNorm1d(out_ch),
             nn.ReLU(True),
             )
-        out_size = np.floor((in_size + 2*padding - 1*(kernel_size - 1) - 1)/stride + 1)
+        out_size = np.floor((in_size + 2*padding - dilation*(kernel_size - 1) - 1)/stride + 1)
         return block, out_size
+    
+class ConvTransBlockBuilder():
+    @classmethod
+    def build(cls, in_size, in_ch, out_ch):
+        kernel_size    = 3
+        stride         = 1
+        padding        = 1
+        bias           = False
+        dilation     = 1
+        output_padding = 0
+        block  = nn.Sequential(
+            nn.ConvTranspose1d(in_ch, out_ch, 
+                               kernel_size    = kernel_size, 
+                               stride         = stride, 
+                               padding        = padding, 
+                               bias           = bias,
+                               dilation     = dilation,
+                               output_padding = output_padding),
+            nn.BatchNorm1d(out_ch),
+            nn.ReLU(True),
+            )
+        out_size = (in_size - 1)*stride - 2*padding + dilation*(kernel_size - 1) + output_padding + 1
+        return block, out_size
+
 class CNNBase(nn.Module):
     """
     CNN Model for classifing turbulence flow velocity statistics: 
@@ -34,7 +60,7 @@ class CNNBase(nn.Module):
 
     def __init__(self, input_size, output_size):
         super().__init__()
-        self.avgpool = nn.AvgPool1d(2, ceil_mode=False)
+        self.avgpool  = nn.AvgPool1d(2, ceil_mode=False)
         self.avgpoolc = nn.AvgPool1d(2, ceil_mode=True)
 
         self.cnn1, len1 = ConvBlockBuilder.build(input_size, 1, 16, 1)
@@ -56,54 +82,19 @@ class CNNBase(nn.Module):
 
         self.cnn64, len64 = ConvBlockBuilder.build(len32, 256, 256, 64)
 
-        self.cnntrans256 = nn.Sequential(
-            nn.ConvTranspose1d(256, 256, kernel_size = 3, stride = 1, padding = 1, bias = False),
-            nn.BatchNorm1d(256),
-            nn.ReLU(True),
-            )
-        lenTrans256 = (len64 - 1)*1 - 2*1 + 1*(3 - 1) + 0 + 1
+        self.cnntrans256, lenTrans256 = ConvTransBlockBuilder.build(len64, 256, 256)
 
-        self.cnntrans128 = nn.Sequential(
-            nn.ConvTranspose1d(256, 128, kernel_size = 3, stride = 1, padding = 1, bias = False),
-            nn.BatchNorm1d(128),
-            nn.ReLU(True),
-            )
-        lenTrans128 = (lenTrans256 - 1)*1 - 2*1 + 1*(3 - 1) + 0 + 1
+        self.cnntrans128, lenTrans128 = ConvTransBlockBuilder.build(lenTrans256, 256, 128)
 
-        self.cnntrans64 = nn.Sequential(
-            nn.ConvTranspose1d(128, 64, kernel_size = 3, stride = 1, padding = 1, bias = False),
-            nn.BatchNorm1d(64),
-            nn.ReLU(True),
-            )
-        lenTrans64 = (lenTrans128 - 1)*1 - 2*1 + 1*(3 - 1) + 0 + 1
+        self.cnntrans64, lenTrans64 = ConvTransBlockBuilder.build(lenTrans128, 128, 64)
 
-        self.cnntrans32 = nn.Sequential(
-            nn.ConvTranspose1d(64, 32, kernel_size = 3, stride = 1, padding = 1, bias = False),
-            nn.BatchNorm1d(32),
-            nn.ReLU(True),
-            )
-        lenTrans32 = (lenTrans64 - 1)*1 - 2*1 + 1*(3 - 1) + 0 + 1
+        self.cnntrans32, lenTrans32 = ConvTransBlockBuilder.build(lenTrans64, 64, 32)
         
-        self.cnntrans16 = nn.Sequential(
-            nn.ConvTranspose1d(32, 16, kernel_size = 3, stride = 1, padding = 1, bias = False),
-            nn.BatchNorm1d(16),
-            nn.ReLU(True),
-            )
-        lenTrans16 = (lenTrans32 - 1)*1 - 2*1 + 1*(3 - 1) + 0 + 1
+        self.cnntrans16, lenTrans16 = ConvTransBlockBuilder.build(lenTrans32, 32, 16)
 
-        self.cnntrans8 = nn.Sequential(
-            nn.ConvTranspose1d(16, 8, kernel_size = 3, stride = 1, padding = 1, bias = False),
-            nn.BatchNorm1d(8),
-            nn.ReLU(True),
-            )
-        lenTrans8 = (lenTrans16 - 1)*1 - 2*1 + 1*(3 - 1) + 0 + 1
+        self.cnntrans8, lenTrans8 = ConvTransBlockBuilder.build(lenTrans16, 16, 8)
         
-        self.cnntrans4 = nn.Sequential(
-            nn.ConvTranspose1d(8, 4, kernel_size = 3, stride = 1, padding = 1, bias = False),
-            nn.BatchNorm1d(4),
-            nn.ReLU(True),
-            )
-        lenTrans4 = (lenTrans8 - 1)*1 - 2*1 + 1*(3 - 1) + 0 + 1
+        self.cnntrans4, lenTrans4 = ConvTransBlockBuilder.build(lenTrans8, 8, 4)
 
         self.flatten = nn.Flatten()
 
