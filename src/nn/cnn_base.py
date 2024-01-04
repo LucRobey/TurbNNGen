@@ -1,6 +1,23 @@
 from torch import nn
 import numpy as np
 
+class ConvBlockBuilder():
+    @classmethod
+    def build(cls, in_size, in_ch, out_ch, kernel_size):
+        stride  = 1
+        padding = 0
+        bias    = False
+        block   = nn.Sequential( 
+            nn.Conv1d(in_ch, out_ch, 
+                      kernel_size = kernel_size, 
+                      stride      = stride, 
+                      padding     = padding, 
+                      bias        = bias),
+            nn.BatchNorm1d(out_ch),
+            nn.ReLU(True),
+            )
+        out_size = np.floor((in_size + 2*padding - 1*(kernel_size - 1) - 1)/stride + 1)
+        return block, out_size
 class CNNBase(nn.Module):
     """
     CNN Model for classifing turbulence flow velocity statistics: 
@@ -14,64 +31,30 @@ class CNNBase(nn.Module):
         L : Size of the integral scale.
             In [1000 2000 3000 4000 5000] 
     """
+
     def __init__(self, input_size, output_size):
         super().__init__()
         self.avgpool = nn.AvgPool1d(2, ceil_mode=False)
         self.avgpoolc = nn.AvgPool1d(2, ceil_mode=True)
 
-        self.cnn1 = nn.Sequential( 
-            nn.Conv1d(1, 16, kernel_size = 1, stride = 1, padding = 0, bias = False),
-            nn.BatchNorm1d(16),
-            nn.ReLU(True),
-            )
-        len1 = np.floor((input_size + 2*0 - 1*(1 - 1) - 1)/1 + 1) # cnn1
-        
-        self.cnn2 = nn.Sequential(
-            nn.Conv1d(16, 32, kernel_size = 2, stride = 1, padding = 0, bias = False),
-            nn.BatchNorm1d(32),
-            nn.ReLU(True),
-            )
-        len2 = np.floor((len1 + 2*0 - 1*(2 - 1) - 1)/1 + 1) # cnn2
+        self.cnn1, len1 = ConvBlockBuilder.build(input_size, 1, 16, 1)
+
+        self.cnn2, len2 = ConvBlockBuilder.build(len1, 16, 32, 2)
         len2 = np.ceil((len2 + 2*0 - 2)/2 + 1)  # avgpoolc
 
-        self.cnn4 = nn.Sequential(
-            nn.Conv1d(32, 64, kernel_size = 4, stride = 1, padding = 0, bias = False),
-            nn.BatchNorm1d(64),
-            nn.ReLU(True),
-            )
-        len4 = np.floor((len2 + 2*0 - 1*(4 - 1) - 1)/1 + 1) # cnn4
+        self.cnn4, len4 = ConvBlockBuilder.build(len2, 32, 64, 4)
         len4 = np.ceil((len4 + 2*0 - 2)/2 + 1)  # avgpoolc 
 
-        self.cnn8 = nn.Sequential(
-            nn.Conv1d(64, 128, kernel_size = 8, stride = 1, padding = 0, bias = False),
-            nn.BatchNorm1d(128),
-            nn.ReLU(True),
-            )
-        len8 = np.floor((len4 + 2*0 - 1*(8 - 1) - 1)/1 + 1) # cnn8
+        self.cnn8, len8 = ConvBlockBuilder.build(len4, 64, 128, 8)
         len8 = np.ceil((len8 + 2*0 - 2)/2 + 1)  # avgpoolc
 
-        self.cnn16 = nn.Sequential(
-            nn.Conv1d(128, 256, kernel_size = 16, stride = 1, padding = 0, bias = False),
-            nn.BatchNorm1d(256),
-            nn.ReLU(True),
-            )
-        len16 = np.floor((len8 + 2*0 - 1*(16 - 1) - 1)/1 + 1) # cnn16
+        self.cnn16, len16 = ConvBlockBuilder.build(len8, 128, 256, 16)
         len16 = np.ceil((len16 + 2*0 - 2)/2 + 1)  # avgpoolc
 
-        self.cnn32 = nn.Sequential(
-            nn.Conv1d(256, 256, kernel_size = 32, stride = 1, padding = 0, bias = False),
-            nn.BatchNorm1d(256),
-            nn.ReLU(True),
-            )
-        len32 = np.floor((len16 + 2*0 - 1*(32 - 1) - 1)/1 + 1) # cnn32
+        self.cnn32, len32 = ConvBlockBuilder.build(len16, 256, 256, 32)
         len32 = np.ceil((len32 + 2*0 - 2)/2 + 1)  # avgpoolc
 
-        self.cnn64 = nn.Sequential(
-            nn.Conv1d(256, 256, kernel_size = 64, stride = 1, padding = 0, bias = False),
-            nn.BatchNorm1d(256),
-            nn.ReLU(True),
-            )
-        len64 = np.floor((len32 + 2*0 - 1*(64 - 1) - 1)/1 + 1) # cnn64
+        self.cnn64, len64 = ConvBlockBuilder.build(len32, 256, 256, 64)
 
         self.cnntrans256 = nn.Sequential(
             nn.ConvTranspose1d(256, 256, kernel_size = 3, stride = 1, padding = 1, bias = False),
