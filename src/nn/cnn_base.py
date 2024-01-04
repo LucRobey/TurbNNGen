@@ -62,6 +62,7 @@ class CNNBase(nn.Module):
         super().__init__()
         self.avgpool  = nn.AvgPool1d(2, ceil_mode=False)
         self.avgpoolc = nn.AvgPool1d(2, ceil_mode=True)
+        self.dropout  = nn.Dropout(p=0.5)
 
         self.cnn1, len1 = ConvBlockBuilder.build(input_size, 1, 16, 1)
 
@@ -105,31 +106,51 @@ class CNNBase(nn.Module):
         
     def forward(self, z):
         out  = self.cnn1(z)
+        out  = self.dropout(out) 
 
         out = self.cnn2(out)
         out = self.avgpoolc(out)
+        out  = self.dropout(out) 
 
         out = self.cnn4(out)
         out = self.avgpoolc(out)
+        out  = self.dropout(out) 
 
         out = self.cnn8(out)
         out = self.avgpoolc(out)
+        out  = self.dropout(out) 
 
         out = self.cnn16(out)
         out = self.avgpoolc(out)
+        out  = self.dropout(out) 
 
         out = self.cnn32(out)
         out = self.avgpoolc(out)
+        out  = self.dropout(out) 
 
         out = self.cnn64(out)
+        out  = self.dropout(out) 
 
         out = self.cnntrans256(out)
+        out  = self.dropout(out) 
+
         out = self.cnntrans128(out)
+        out  = self.dropout(out) 
+
         out = self.cnntrans64(out)
+        out  = self.dropout(out) 
+
         out = self.cnntrans32(out)
+        out  = self.dropout(out) 
+
         out = self.cnntrans16(out)
+        out  = self.dropout(out) 
+
         out = self.cnntrans8(out)
+        out  = self.dropout(out) 
+
         out = self.cnntrans4(out)
+        out  = self.dropout(out) 
 
         out = self.flatten(out)
 
