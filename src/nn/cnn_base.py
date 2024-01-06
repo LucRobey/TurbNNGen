@@ -1,4 +1,5 @@
 from torch import nn
+from torch.nn import functional as F
 import numpy as np
 
 class ConvBlockBuilder():
@@ -58,11 +59,15 @@ class CNNBase(nn.Module):
             In [1000 2000 3000 4000 5000] 
     """
 
-    def __init__(self, input_size, output_size):
+    def __init__(self, input_size, output_size, dropout_probs):
         super().__init__()
         self.avgpool  = nn.AvgPool1d(2, ceil_mode=False)
         self.avgpoolc = nn.AvgPool1d(2, ceil_mode=True)
-        self.dropout  = nn.Dropout(p=0.5)
+        if dropout_probs is None:
+            dropout_probs = [0.5] * 14  # Adjust the length based on the number of layers
+
+        self.dropout_probs = dropout_probs
+        self.dropout  = nn.Dropout()
 
         self.cnn1, len1 = ConvBlockBuilder.build(input_size, 1, 16, 1)
 
@@ -106,51 +111,51 @@ class CNNBase(nn.Module):
         
     def forward(self, z):
         out  = self.cnn1(z)
-        out  = self.dropout(out) 
+        out  = self.dropout(F.dropout(out, p=self.dropout_probs[0], training=self.training)) 
 
         out = self.cnn2(out)
         out = self.avgpoolc(out)
-        out  = self.dropout(out) 
+        out  = self.dropout(F.dropout(out, p=self.dropout_probs[1], training=self.training)) 
 
         out = self.cnn4(out)
         out = self.avgpoolc(out)
-        out  = self.dropout(out) 
+        out  = self.dropout(F.dropout(out, p=self.dropout_probs[2], training=self.training)) 
 
         out = self.cnn8(out)
         out = self.avgpoolc(out)
-        out  = self.dropout(out) 
+        out  = self.dropout(F.dropout(out, p=self.dropout_probs[3], training=self.training)) 
 
         out = self.cnn16(out)
         out = self.avgpoolc(out)
-        out  = self.dropout(out) 
+        out  = self.dropout(F.dropout(out, p=self.dropout_probs[4], training=self.training)) 
 
         out = self.cnn32(out)
         out = self.avgpoolc(out)
-        out  = self.dropout(out) 
+        out  = self.dropout(F.dropout(out, p=self.dropout_probs[5], training=self.training)) 
 
         out = self.cnn64(out)
-        out  = self.dropout(out) 
+        out  = self.dropout(F.dropout(out, p=self.dropout_probs[6], training=self.training)) 
 
         out = self.cnntrans256(out)
-        out  = self.dropout(out) 
+        out  = self.dropout(F.dropout(out, p=self.dropout_probs[7], training=self.training)) 
 
         out = self.cnntrans128(out)
-        out  = self.dropout(out) 
+        out  = self.dropout(F.dropout(out, p=self.dropout_probs[8], training=self.training)) 
 
         out = self.cnntrans64(out)
-        out  = self.dropout(out) 
+        out  = self.dropout(F.dropout(out, p=self.dropout_probs[9], training=self.training)) 
 
         out = self.cnntrans32(out)
-        out  = self.dropout(out) 
+        out  = self.dropout(F.dropout(out, p=self.dropout_probs[10], training=self.training)) 
 
         out = self.cnntrans16(out)
-        out  = self.dropout(out) 
+        out  = self.dropout(F.dropout(out, p=self.dropout_probs[11], training=self.training)) 
 
         out = self.cnntrans8(out)
-        out  = self.dropout(out) 
+        out  = self.dropout(F.dropout(out, p=self.dropout_probs[12], training=self.training)) 
 
         out = self.cnntrans4(out)
-        out  = self.dropout(out) 
+        out  = self.dropout(F.dropout(out, p=self.dropout_probs[13], training=self.training)) 
 
         out = self.flatten(out)
 
