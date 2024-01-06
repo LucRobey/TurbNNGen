@@ -14,5 +14,5 @@ class CNNRegressor(CNNBase):
         L : Size of the integral scale.
             In [1000 2000 3000 4000 5000] 
     """
-    def __init__(self, input_size=nctes.LEN_SAMPLE):
-        super().__init__(input_size=input_size, output_size=4)
+    def __init__(self, input_size=nctes.LEN_SAMPLE, dropout_probs=None):
+        super().__init__(input_size=input_size, output_size=4, dropout_probs=dropout_probs)
