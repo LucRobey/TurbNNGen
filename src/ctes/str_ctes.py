@@ -27,4 +27,6 @@ CRITERION = "criterion"
 OPTIMIZER = "optimizer"
 LR = "lr"
 SEED = "seed"
+DROPOUT_PROBS = "dropout_probs"
+MODEL_NAME = "model_name"
 
