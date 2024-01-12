@@ -171,3 +171,5 @@ tmp/
 
 # Notebooks
 lab-session-5-fashion-MNIST-DI-MARIA_BULLIARD.ipynb
+
+local.py
