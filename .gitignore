@@ -162,6 +162,7 @@ cython_debug/
 
 # Data
 MRW.npz
+generate_data.sh
 
 # Images
 *.png
