@@ -19,4 +19,4 @@ class AvgPoolBuilder():
                     count_include_pad) 
         round_function = np.ceil if ceil_mode else np.floor
         out_size = round_function(((in_size + 2*padding - kernel_size)/stride) + 1)
-        return block, out_size
+        return block, int(out_size)
