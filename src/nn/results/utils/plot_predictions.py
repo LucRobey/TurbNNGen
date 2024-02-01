@@ -9,7 +9,7 @@ def plot_predictions(targets, preds, labels):
     # for i in range(outputs_nb):
     for i, label in enumerate(labels):
         plt.subplot(2, 2, i+1) 
-        plt.scatter(targets[:, i], preds[:, i])
+        plt.scatter(targets[:, i], preds[:, i], alpha = 0.1)
         plt.title(f"Actual vs Predicted values of {label}")
         plt.xlabel(f"Actual {label}")
         plt.ylabel(f"Predicted {label}")
