@@ -12,10 +12,10 @@ if __name__ == "__main__":
                         optimizer_params={"lr":1e-3, "weight_decay":0.0}, 
                         data_path="./data",
                         model_name="Top-Down v1", 
-                        n_epochs=2, 
+                        n_epochs=100, 
                         batch_size=6, 
                         valid_size=0.2, 
                         test_size=0.2, 
                         seed=42, 
-                        verbose=True)
+                        verbose=False)
     
