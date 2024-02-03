@@ -5,7 +5,7 @@ import numpy as np
 class Trainer():
     
     @classmethod
-    def train(cls, n_epochs, train_loader, valid_loader, model, criterion, optimizer, device, save_path):
+    def train(cls, n_epochs, train_loader, valid_loader, model, criterion, optimizer, device, save_path, losses_path):
         train_losses, valid_losses = [], []
         # initialize tracker for minimum validation loss
         valid_loss_min = np.Inf  # set initial "min" to infinity
@@ -53,6 +53,8 @@ class Trainer():
                 valid_loss))
                 torch.save(model.state_dict(), save_path)
                 valid_loss_min = valid_loss
+
+            np.savez(losses_path , train=np.array(train_losses), val=np.array(valid_losses))
         
         return train_losses, valid_losses
     
