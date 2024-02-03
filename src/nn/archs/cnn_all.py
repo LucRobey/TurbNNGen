@@ -2,6 +2,7 @@ from torch import nn
 from torch.nn import functional as F
 from src.nn.archs.utils import ConvBlockBuilder, ConvTransBlockBuilder, AvgPoolBuilder
 import numpy as np
+import src.ctes.str_ctes as sctes
 
 class CNN_ALL(nn.Module):
     """
@@ -17,50 +18,35 @@ class CNN_ALL(nn.Module):
             In [1000 2000 3000 4000 5000] 
     """
     OUTPUT_SIZE = 4
+    LABELS = [sctes.C1, sctes.C2, sctes.L, sctes.EPSILON]
     def __init__(self, input_size, dropout_probs):
         super().__init__()
-        # if dropout_probs is None:
-        #     dropout_probs = [0.5] * 14  # Adjust the length based on the number of layers
-
-        # self.dropout_probs = dropout_probs
-        # self.dropout       = nn.Dropout()
 
         self.cnn2, len2 = ConvBlockBuilder.build(input_size, 1, 128, 2)
         self.pool2, len2 = AvgPoolBuilder.build(len2, 4, ceil_mode=True)
-        # print(f"{len2 = }")
 
         self.cnn4, len4 = ConvBlockBuilder.build(len2, 128, 64, 4)
         self.pool4, len4 = AvgPoolBuilder.build(len4, 4, ceil_mode=True)
-        # print(f"{len4 = }")
 
         self.cnn8, len8 = ConvBlockBuilder.build(len4, 64, 32, 8)
         self.pool8, len8 = AvgPoolBuilder.build(len8, 4, ceil_mode=True)
-        # print(f"{len8 = }")
 
         self.cnn16, len16 = ConvBlockBuilder.build(len8, 32, 16, 16)
         self.pool16, len16 = AvgPoolBuilder.build(len16, 4, ceil_mode=True)
-        # print(f"{len16 = }")
-
         self.cnn32, len32 = ConvBlockBuilder.build(len16, 16, 8, 32)
         self.pool32, len32 = AvgPoolBuilder.build(len32, 4, ceil_mode=True)
-        # print(f"{len32 = }")
-        
 
         self.flatten = nn.Flatten()
         len_flatten  = int(len32 * 8)
-        # print(f"{len_flatten = }")
 
         len_dense1  = len_flatten // 2
         self.dense1 = nn.Linear(len_flatten, len_dense1)
-        # print(f"{len_dense1 = }")
 
         len_dense2  = len_dense1 // 2
         self.dense2 = nn.Linear(len_dense1, len_dense2)
-        # print(f"{len_dense2 = }")
 
         len_dense3  = self.OUTPUT_SIZE
         self.dense3 = nn.Linear(len_dense2, len_dense3)
-        # print(f"{len_dense3 = }")
 
         self.softplus = nn.Softplus()
         
