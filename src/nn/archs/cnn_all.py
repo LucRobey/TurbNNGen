@@ -1,6 +1,6 @@
 from torch import nn
 from torch.nn import functional as F
-from src.nn.archs.utils import ConvBlockBuilder, ConvTransBlockBuilder
+from src.nn.archs.utils import ConvBlockBuilder, ConvTransBlockBuilder, AvgPoolBuilder
 import numpy as np
 
 class CNN_ALL(nn.Module):
@@ -25,24 +25,24 @@ class CNN_ALL(nn.Module):
             dropout_probs = [0.5] * 14  # Adjust the length based on the number of layers
 
         self.dropout_probs = dropout_probs
-        self.dropout  = nn.Dropout()
+        self.dropout       = nn.Dropout()
 
-        self.cnn1, len1 = ConvBlockBuilder.build(input_size, 1, 16, 1)
+        self.cnn1, len1  = ConvBlockBuilder.build(input_size, 1, 16, 1)
 
         self.cnn2, len2 = ConvBlockBuilder.build(len1, 16, 32, 2)
-        len2 = np.ceil((len2 + 2*0 - 2)/2 + 1)  # avgpoolc
+        self.pool2, len2 = AvgPoolBuilder.build(len2, 2, ceil_mode=True)
 
         self.cnn4, len4 = ConvBlockBuilder.build(len2, 32, 64, 4)
-        len4 = np.ceil((len4 + 2*0 - 2)/2 + 1)  # avgpoolc 
+        self.pool4, len4 = AvgPoolBuilder.build(len4, 2, ceil_mode=True)
 
         self.cnn8, len8 = ConvBlockBuilder.build(len4, 64, 128, 8)
-        len8 = np.ceil((len8 + 2*0 - 2)/2 + 1)  # avgpoolc
+        self.pool8, len8 = AvgPoolBuilder.build(len8, 2, ceil_mode=True)
 
         self.cnn16, len16 = ConvBlockBuilder.build(len8, 128, 256, 16)
-        len16 = np.ceil((len16 + 2*0 - 2)/2 + 1)  # avgpoolc
+        self.pool16, len16 = AvgPoolBuilder.build(len16, 2, ceil_mode=True)
 
         self.cnn32, len32 = ConvBlockBuilder.build(len16, 256, 256, 32)
-        len32 = np.ceil((len32 + 2*0 - 2)/2 + 1)  # avgpoolc
+        self.pool32, len32 = AvgPoolBuilder.build(len32, 2, ceil_mode=True)
 
         self.cnn64, len64 = ConvBlockBuilder.build(len32, 256, 256, 64)
 
@@ -72,23 +72,23 @@ class CNN_ALL(nn.Module):
         out  = self.dropout(F.dropout(out, p=self.dropout_probs[0], training=self.training)) 
 
         out = self.cnn2(out)
-        out = self.avgpoolc(out)
+        out = self.pool2(out)
         out  = self.dropout(F.dropout(out, p=self.dropout_probs[1], training=self.training)) 
 
         out = self.cnn4(out)
-        out = self.avgpoolc(out)
+        out = self.pool4(out)
         out  = self.dropout(F.dropout(out, p=self.dropout_probs[2], training=self.training)) 
 
         out = self.cnn8(out)
-        out = self.avgpoolc(out)
+        out = self.pool8(out)
         out  = self.dropout(F.dropout(out, p=self.dropout_probs[3], training=self.training)) 
 
         out = self.cnn16(out)
-        out = self.avgpoolc(out)
+        out = self.pool16(out)
         out  = self.dropout(F.dropout(out, p=self.dropout_probs[4], training=self.training)) 
 
         out = self.cnn32(out)
-        out = self.avgpoolc(out)
+        out = self.pool32(out)
         out  = self.dropout(F.dropout(out, p=self.dropout_probs[5], training=self.training)) 
 
         out = self.cnn64(out)
