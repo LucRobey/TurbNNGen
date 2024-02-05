@@ -12,12 +12,17 @@ class CNN_C1(nn.Module):
     OUTPUT_SIZE = 1
     def __init__(self, input_size, dropout_probs):
         super().__init__()
+
         self.avgpool  = nn.AvgPool1d(2, ceil_mode=False)
         self.avgpoolc = nn.AvgPool1d(2, ceil_mode=True)
-        if dropout_probs is None:
-            dropout_probs = [0.5] * 14  # Adjust the length based on the number of layers
 
-        self.dropout_probs = dropout_probs
+        
+        if dropout_probs is not None:
+            self.dropout_layers = nn.ModuleList([nn.Dropout(p=p) for p in dropout_probs])
+        else:
+            self.dropout_layers = nn.ModuleList([])
+
+        
         self.dropout  = nn.Dropout()
 
         self.cnn1, len1 = ConvBlockBuilder.build(input_size, 1, 16, 1)
@@ -58,60 +63,71 @@ class CNN_C1(nn.Module):
         self.dense = nn.Linear(int(lenTrans4*4), self.OUTPUT_SIZE)
 
         self.softplus = nn.Softplus()
-        
+
+    
+    def apply_dropout(self, x, index):
+        if not self.dropout_layers:
+            return x
+
+        if self.dropout_layers[index] is not None:
+            return self.dropout_layers[index](F.dropout(x, p=self.dropout_layers[index].p, training=self.training))
+            # NB : training = self.training utile car permet de ne pas prendre en compte le dropout pendant la phase de validation
+        return x 
+   
         
     def forward(self, z):
         out  = self.cnn1(z)
-        out  = self.dropout(F.dropout(out, p=self.dropout_probs[0], training=self.training)) 
+        out = self.apply_dropout(out, 0)
 
         out = self.cnn2(out)
         out = self.avgpoolc(out)
-        out  = self.dropout(F.dropout(out, p=self.dropout_probs[1], training=self.training)) 
+        out = self.apply_dropout(out, 1) 
 
         out = self.cnn4(out)
         out = self.avgpoolc(out)
-        out  = self.dropout(F.dropout(out, p=self.dropout_probs[2], training=self.training)) 
-
+        out = self.apply_dropout(out, 2)
+        
         out = self.cnn8(out)
         out = self.avgpoolc(out)
-        out  = self.dropout(F.dropout(out, p=self.dropout_probs[3], training=self.training)) 
-
+        out = self.apply_dropout(out, 3)
+        
         out = self.cnn16(out)
         out = self.avgpoolc(out)
-        out  = self.dropout(F.dropout(out, p=self.dropout_probs[4], training=self.training)) 
-
+        out = self.apply_dropout(out, 4)
+        
         out = self.cnn32(out)
         out = self.avgpoolc(out)
-        out  = self.dropout(F.dropout(out, p=self.dropout_probs[5], training=self.training)) 
-
+        out = self.apply_dropout(out, 5)
+        
         out = self.cnn64(out)
-        out  = self.dropout(F.dropout(out, p=self.dropout_probs[6], training=self.training)) 
-
+        out = self.apply_dropout(out, 6)
+        
         out = self.cnntrans256(out)
-        out  = self.dropout(F.dropout(out, p=self.dropout_probs[7], training=self.training)) 
-
+        out = self.apply_dropout(out, 7)
+        
         out = self.cnntrans128(out)
-        out  = self.dropout(F.dropout(out, p=self.dropout_probs[8], training=self.training)) 
-
+        out = self.apply_dropout(out, 8)
+        
         out = self.cnntrans64(out)
-        out  = self.dropout(F.dropout(out, p=self.dropout_probs[9], training=self.training)) 
-
+        out = self.apply_dropout(out, 9)
+        
         out = self.cnntrans32(out)
-        out  = self.dropout(F.dropout(out, p=self.dropout_probs[10], training=self.training)) 
-
+        out = self.apply_dropout(out, 10)
+        
         out = self.cnntrans16(out)
-        out  = self.dropout(F.dropout(out, p=self.dropout_probs[11], training=self.training)) 
-
+        out = self.apply_dropout(out, 11)
+        
         out = self.cnntrans8(out)
-        out  = self.dropout(F.dropout(out, p=self.dropout_probs[12], training=self.training)) 
-
+        out = self.apply_dropout(out, 12)
+        
         out = self.cnntrans4(out)
-        out  = self.dropout(F.dropout(out, p=self.dropout_probs[13], training=self.training)) 
-
+        out = self.apply_dropout(out, 13)
+            
         out = self.flatten(out)
 
         out = self.dense(out)
 
         out = self.softplus(out)
         
-        return out
+        return out 
+
