@@ -16,8 +16,10 @@ def plot_distributions(targets, preds, labels):
 
         plt.boxplot(box_y)
         plt.violinplot(box_y)
+
         plt.xticks(np.arange(1,len(box_x)+1), box_x)
-        
+        plt.yticks([min(plt.yticks()[0]), max(plt.yticks()[0])] + list(box_x))
+
         plt.title(f"Actual vs Predicted values of {label}")
         plt.xlabel(f"Actual {label}")
         plt.ylabel(f"Predicted {label}")
