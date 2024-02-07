@@ -12,7 +12,7 @@ if __name__ == "__main__":
                         optimizer_params={"lr":1e-4, "weight_decay": 0.0}, 
                         data_path="./data",
                         model_name="Top-Down v2", 
-                        n_epochs=2, # 100 - 400
+                        n_epochs=250,
                         batch_size=6, 
                         valid_size=0.2, 
                         test_size=0.2, 
