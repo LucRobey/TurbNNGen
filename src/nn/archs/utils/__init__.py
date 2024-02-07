@@ -1,3 +1,4 @@
 from .conv_block_builder import ConvBlockBuilder
 from .conv_trans_block_builder import ConvTransBlockBuilder
 from .avg_pool_builder import AvgPoolBuilder
+from .max_pool_builder import MaxPoolBuilder

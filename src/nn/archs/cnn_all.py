@@ -19,7 +19,7 @@ class CNN_ALL(nn.Module):
     """
     OUTPUT_SIZE = 4
     LABELS = [sctes.C1, sctes.C2, sctes.L, sctes.EPSILON]
-    def __init__(self, input_size, dropout_probs):
+    def __init__(self, input_size, dropout_probs=None):
         super().__init__()
 
         self.cnn2, len2 = ConvBlockBuilder.build(input_size, 1, 128, 2)
