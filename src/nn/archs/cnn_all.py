@@ -33,6 +33,7 @@ class CNN_ALL(nn.Module):
 
         self.cnn16, len16 = ConvBlockBuilder.build(len8, 32, 16, 16)
         self.pool16, len16 = AvgPoolBuilder.build(len16, 4, ceil_mode=True)
+        
         self.cnn32, len32 = ConvBlockBuilder.build(len16, 16, 8, 32)
         self.pool32, len32 = AvgPoolBuilder.build(len32, 4, ceil_mode=True)
 
