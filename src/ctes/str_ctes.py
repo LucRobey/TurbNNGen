@@ -8,6 +8,7 @@ C1 = "c1"
 C2 = "c2"
 L = "L"
 EPSILON = "EPSILON"
+ALL_LABELS = [C1, C2, L, EPSILON]
 
 
 X = "X"
