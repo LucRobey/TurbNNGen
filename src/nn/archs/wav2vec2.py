@@ -34,7 +34,8 @@ class Wav2Vec2(nn.Module):
         super().__init__()
 
         self.wav2vec2 = bundle.get_model()
-        self.wav2vec2.feature_extractor.requires_grad_(requires_grad=False)
+        self.wav2vec2.requires_grad_(requires_grad=False)
+        # self.wav2vec2.feature_extractor.requires_grad_(requires_grad=False)
 
         self.wav2vec2_head = Wav2Vec2Head(n_labels)
             
