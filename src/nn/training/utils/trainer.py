@@ -54,14 +54,19 @@ class Trainer():
             
             print('Epoch: {} \ttraining Loss: {:.6f} \tvalidation Loss: {:.6f}'.format(epoch+1, train_loss, valid_loss))
 
+            
+            print('Saving last model ...')
+            torch.save(model.state_dict(), save_path + "_last.pt")
+            
             # save model if validation loss has decreased
             if valid_loss <= valid_loss_min:
-                print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(
+                print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving best model too ...'.format(
                 valid_loss_min,
                 valid_loss))
-                torch.save(model.state_dict(), save_path)
+                torch.save(model.state_dict(), save_path + "_best.pt")
                 valid_loss_min = valid_loss
 
+            print('Saving loss ...')
             np.savez(losses_path , train=np.array(train_losses), val=np.array(valid_losses))
         
         return train_losses, valid_losses
@@ -74,7 +79,7 @@ class Trainer():
         timestamp = datetime.now().strftime('%Y_%m_%d__%H_%M_%S')
         arch_name  = builder.__name__
         hyperparams_path = f"{data_path}/hyperparams_{arch_name}_{timestamp}.npz"
-        model_path = f"{data_path}/model_{arch_name}_{timestamp}.pt"
+        model_path = f"{data_path}/model_{arch_name}_{timestamp}"
         losses_path = f"{data_path}/losses_{arch_name}_{timestamp}.npz"
         if verbose: print(f"{timestamp}")
 
