@@ -41,12 +41,12 @@ def generate_data(path):
                         sub_x = x[isample*LEN_SUBSAMPLE : (isample + 1)*LEN_SUBSAMPLE]
                         mrw[ic1,ic2,iL,iepsilon,isample, :] = np.concatenate([sub_x, y], axis=0)
 
+
     XY = mrw.reshape(-1, LEN_SUBSAMPLE + len(Y_LABELS))
     X = XY[:, :LEN_SUBSAMPLE]
     Y = XY[:, LEN_SUBSAMPLE:]
 
-    np.savez(path ,X=X, Y=Y, N_SUBSAMPLES=N_SUBSAMPLES, Y_LABELS=Y_LABELS, 
-             c1s=c1s, c2s=c2s, Ls=Ls, epsilons=epsilons)
+    np.savez(path ,X=X, Y=Y, Y_LABELS=Y_LABELS)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -54,4 +54,4 @@ if __name__ == "__main__":
     parser.add_argument("--scalerpath", type=str, default="data/scaler.joblib", help="Path to save normalizer")
     args = parser.parse_args()
     generate_data(args.datapath)
-    normalize(args.datapath , args.scalerpath)
+    normalize(args.datapath, args.scalerpath, save_scaler=True)
