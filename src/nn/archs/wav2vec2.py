@@ -35,7 +35,6 @@ class Wav2Vec2(nn.Module):
 
         self.wav2vec2 = bundle.get_model()
         self.wav2vec2.requires_grad_(requires_grad=False)
-        # self.wav2vec2.feature_extractor.requires_grad_(requires_grad=False)
 
         self.wav2vec2_head = Wav2Vec2Head(n_labels)
             
@@ -47,4 +46,15 @@ class Wav2Vec2(nn.Module):
         out = self.wav2vec2_head(out)
         return out
     
+
+class Wav2Vec2ALL(nn.Module):
+    LABELS = sctes.ALL_LABELS
+    def __init__(self, input_size=None, dropout_probs=None):
+        super().__init__()
+
+        self.model = Wav2Vec2(len(self.LABELS), WAV2VEC2_ASR_BASE_960H)
+            
+    
+    def forward(self, z):
+        return self.model(z)
 
