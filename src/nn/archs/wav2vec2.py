@@ -45,3 +45,5 @@ class Wav2Vec2(nn.Module):
         out = torch.stack(features, dim=1)
         out = self.wav2vec2_head(out)
         return out
+    
+
