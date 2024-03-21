@@ -127,7 +127,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-path_ctes.py
+pkgs_dirs/
 
 # Spyder project settings
 .spyderproject
@@ -164,16 +164,6 @@ cython_debug/
 MRW.npz
 MRW_small.npz
 MRW_big.npz
-generate_data.sh
-generate_more_data.sh
 
 # Images
 *.png
-
-# Temporal
-tmp/
-
-# Notebooks
-lab-session-5-fashion-MNIST-DI-MARIA_BULLIARD.ipynb
-
-local.py
