@@ -6,7 +6,7 @@ from src.data.mrw_dataset            import MRWDataset
 from src.data.create_data_loaders    import create_data_loaders
 
 import src.ctes.num_ctes             as nctes
-import src.ctes.path_ctes            as pctes
+import src.nn.path_ctes              as pctes
 import numpy                         as np
 import torch 
 import random
