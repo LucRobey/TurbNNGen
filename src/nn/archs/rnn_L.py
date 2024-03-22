@@ -1,8 +1,10 @@
 from torch import nn
 import torch
+import src.ctes.str_ctes as sctes
 
 
 class RNN_L(nn.Module):
+    LABELS = [sctes.L]
     def __init__(self, input_size):
         super(RNN_L, self).__init__()
         self.lstm1 = nn.LSTM(input_size=input_size, hidden_size=128, batch_first=True)
