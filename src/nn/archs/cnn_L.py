@@ -2,6 +2,7 @@ from torch import nn
 from torch.nn import functional as F
 from src.nn.archs.utils import ConvBlockBuilder, ConvTransBlockBuilder
 import numpy as np
+import src.ctes.str_ctes as sctes
 
 class CNN_L(nn.Module):
     """
@@ -10,6 +11,7 @@ class CNN_L(nn.Module):
             In [1000 2000 3000 4000 5000] 
     """
     OUTPUT_SIZE = 1
+    LABELS = [sctes.L]
     def __init__(self, input_size, dropout_probs):
         super().__init__()
 

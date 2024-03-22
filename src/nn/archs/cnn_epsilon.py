@@ -2,6 +2,7 @@ from torch import nn
 from torch.nn import functional as F
 from src.nn.archs.utils import ConvBlockBuilder, ConvTransBlockBuilder
 import numpy as np
+import src.ctes.str_ctes as sctes
 
 class CNN_EPSILON(nn.Module):
     """
@@ -10,6 +11,7 @@ class CNN_EPSILON(nn.Module):
             In [0.5 1.5 2.5 3.5 4.5]
     """
     OUTPUT_SIZE = 1
+    LABELS = [sctes.EPSILON]
     def __init__(self, input_size, dropout_probs):
         super().__init__()
 

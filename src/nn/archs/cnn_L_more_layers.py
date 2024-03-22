@@ -1,8 +1,10 @@
 from torch import nn
 import torch
 import torch.nn.functional as F
+import src.ctes.str_ctes as sctes
 
 class CNN_L_MORE_LAYERS(nn.Module):
+    LABELS = [sctes.L]
     def __init__(self):
         super(CNN_L_MORE_LAYERS, self).__init__()
         self.conv1 = nn.Conv1d(in_channels=1, out_channels=32, kernel_size=10)
