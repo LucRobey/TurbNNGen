@@ -1,176 +1,126 @@
-# TurbNNGen
-projet ProCom A3 imt
+## Download
 
-## Pre-requirements
-* conda >= 23.5.2
+### HTTPS
+```
+git clone https://github.com/LucRobey/TurbNNGen.git
+```
+### SSH
+```
+git clone git@github.com:LucRobey/TurbNNGen.git
+```
+### Github CLI
+```
+gh repo clone LucRobey/TurbNNGen
+```
+## Prerequisites
+* Conda (v23.5.2)
 
-## Installation
-
-### Raw installation commands
-#### 0.
-Clean space for the project:
+## Pre-installation
+Clean up environment
 ```
 conda clean --all
 ```
-
-Change folder for downloading packages:
+Choose directory for library downloads
 ```
 conda config --add pkgs_dirs <path-downloading-dir>
 ```
 
-#### 1.
-```
-conda create --name <env-name> python=3.11 --yes
-```
-or 
-```
-conda create --prefix <env-installation-path> python=3.11 --yes
-```
-#### 2.
-```
-conda activate <env-name>
-```
-or 
-```
-conda activate <env-installation-path>
-```
-#### 3.
-```
-conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia --yes
-```
-#### 4.
-```
-conda install --file conda_requirements.txt --yes
-```
-#### 5.
-```
-pip install -r pip_requirements.txt
-```
-#### 6.
-```
-python -m pip install -e .
-```
-### Windows installation script
-```
-win_install.bat
-```
-
-### Linux installation script
+## Installation
+Three installation methods are available:
+### Linux Script
+Grant execution permission to the script
 ```
 chmod u+x lin_install.sh
 ```
+Run the script (2 options):
+**Specify an environment name**
 ```
-lin_install.sh --name <env-name>
+./lin_install.sh --name <env-name>
 ```
-or
+**Specify installation environment location**
 ```
-lin_install.sh --prefix <env-installation-path>
+./lin_install.sh --prefix <env-installation-path>
 ```
-
-### Add new dependencies
-Add new dependencies installed with `conda` to `conda-requirements.txt`  
-Add new dependencies installed with `pip` to `pip-requirements.txt`
-
-### Activate environnement
+### Windows Script
+Run the script (2 options):
+Specify an environment name
 ```
-conda activate turb
+./win_install.bat--name <env-name>
 ```
-
-### Deactivate environnement
+Specify installation environment location
 ```
-conda deactivate
+./win_install.bat --prefix <env-installation-path>
 ```
 
-## Remote Connection
-### Terminal 1
-#### 1.
+### Step-by-step
+Create Conda environment (2 options)
+**Specify an environment name**
 ```
-ssh <user-name>@<computer-name>.imta.fr 
+conda create --name <env-name> python=3.11 --yes
 ```
-#### 2.
+**Specify installation environment location**
 ```
-source ~/miniconda3/bin/activate <env-name>
+conda create --prefix <env-installation-path> python=3.11 --yes
 ```
-or
+Activate Conda environment (2 options)
+**Specify environment name**
 ```
-source ~/miniconda3/bin/activate <env-installation-path>
+conda activate <env-name>
 ```
-#### 3.
+**Specify installation environment location**
 ```
-jupyter notebook --no-browser --port=8888
+conda activate <env-installation-path>
 ```
-### Terminal 2
+Install PyTorch and other associated libraries
 ```
-ssh -N -L localhost:1234:localhost:8888 <user-name>@<computer-name>
+conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia --yes
 ```
-### Browser
-#### 1.
+Install additional libraries with Conda
 ```
-http://localhost:1234
+conda install --file conda_requirements.txt --yes
 ```
-#### 2.
-Copy the token shown in `Terminal 1`
+Install additional libraries with pip
+```
+pip install -r pip_requirements.txt
+```
+Install source code as a library
+```
+python -m pip install -e .
+```
+## Activation of Environment
+Activate Conda environment (2 options)
+**Specify environment name**
+```
+conda activate <env-name>
+```
+**Specify installation environment location**
+```
+conda activate <env-installation-path>
+```
+## Data Generation
+Kolmogorov statistics of generated data are automatically normalized to be between 0 and 1, facilitating subsequent training tasks.
 
-
-
-
-## Connection using VM
-### Open a first terminal
-#### 1. Connect to a machine that has GPU (for now only 025 seems to work)
+### Initial Data Generation
 ```
-ssh <user-name>@sl-tp-br-025.imta.fr 
+python ./src/data/generate_data.py --datapath <path-to-save-data> --scalerpath <path-to-save-scaler>
 ```
-#### 2. Activate turb envir
+Arguments:
+* `datapath`: Path to the file (existing or not) to save the generated data. The save directory must exist.
+* `scalerpath`: Path to the file (existing or not) to save the object that scaled the generated data. The save directory must exist.
+### Generating More Data
 ```
-conda activate turb
+python ./src/data/generate_more_data.py --datapath <path-to-data> --scalerpath <path-to-scaler>
 ```
-#### 3. "Connection" to jupyter 
+Arguments:
+* `datapath`: Path to the existing file containing the originally generated data.
+* `scalerpath`: Path to the existing file containing the object that scaled the originally generated data.
+
+### Data Denormalization
 ```
-jupyter notebook --no-browser --port=8888
+python ./src/data/denormalizer.py <path-to-data> <path-to-scaler>
 ```
-### Open a second terminal 
+### Data Exploration
 ```
-ssh -N -L localhost:1234:localhost:8888 <user-name>@sl-tp-br-025.imta.fr 
+jupyter notebook src/data/MRW.ipynb
 ```
-### Open your browser
-#### 1.
-```
-http://localhost:1234
-```
-#### 2. (You might have to do this step)
-Copy the token shown in the first terminal if asked 
-
-
-
-
-
-## Dataset
-### Generate the data 
-```
-python ./src/data/generate_data.py
-```
-Note: Modify path in the file if needed
-
-### Explore
-
-Once you have generated the data, you can start training the NN model. 
-To do so, use the notebook regressor_training.ipynb in src/nn. 
-
-Things you need to modify in the notebook :
-- in the 3rd cell, we use pctes.DATAPATH to get the path where the data (MRW file) is saved. Go to src/ctes to add your own path and call it in the notebook.
-- check that the device is using 'cuda' and not the cpu so that calculations don't last too long
-- modify the different parameters (without forgetting to update the model name) 
-
-Once the model in done training, you can go to the regressor_results.ipynb file to see the results on the test set. 
-To do so, you need to retrieve the timestamp of the generated model by going to the data (not in src !) folder. In theory you should have 3 files for your training : losses, model, hyperparameters with all the same timestamp. Copy paste this timestamp in the notebook (2nd cell). As for the training notebook, you also need to update path via pctes (in 2nd cell). 
-
-(What good results should look like : training and validation losses converge towards the same value and the Actual vs Preds graphs are "diagonal") 
-
-
-
-Another training notebook was added : regressor_training_general.ipynb. The goal is to more easily launch several training one after the other by calling the function in successive cells and letting the VM open for several hours (for example during the night).
-
-
-
-
-
+Note: Specify the relative route to the data in the J
