@@ -1,3 +1,5 @@
+# TurbNNGen
+
 ## Download
 
 ### HTTPS
@@ -124,3 +126,105 @@ python ./src/data/denormalizer.py <path-to-data> <path-to-scaler>
 jupyter notebook src/data/MRW.ipynb
 ```
 Note: Specify the relative route to the data in the J
+
+## Neural Networks
+
+All information regarding the definition, training, and evaluation of neural networks can be found in the following directories:
+```
+src/
+|-- nn/
+|-- archs/
+|-- losses/
+|-- results/
+|-- training/
+```
+* `src/nn/archs`: Contains various architectures.
+* `src/nn/losses`: Contains definitions of loss functions.
+* `src/nn/results`: Contains Jupyter notebooks to analyze the results of various trained architectures.
+* `src/nn/training`: Contains Jupyter notebooks to train various architectures.
+
+### Training
+
+There are 5 training files:
+
+* `src/nn/training/cnn_all_training.ipynb`: Architectures aiming to estimate all statistics (c1, c2, L, epsilon).
+* `src/nn/training/cnn_c1_training.ipynb`: Architectures aiming to estimate c1.
+* `src/nn/training/cnn_c2_training.ipynb`: Architectures aiming to estimate c2.
+* `src/nn/training/cnn_L_training.ipynb`: Architectures aiming to estimate L.
+* `src/nn/training/cnn_epsilon_training.ipynb`: Architectures aiming to estimate epsilon.
+
+All these files can be opened in a Jupyter notebook, hyper-parameterized (following the steps specified in the notebooks), and executed.
+
+For example:
+```
+jupyter notebook src/nn/training/cnn_all_training.ipynb
+```
+Note: It is necessary to specify the relative path to the data in the Jupyter notebook. This action is also possible from the following file:
+* `src/nn/path_ctes.py`
+```
+DATAPATH   = "../../../data/MRW.npz"
+SCALERPATH = "../../../data/scaler.joblib"
+```
+After completing the training, the following files can be found in the following directory:
+```
+data/
+|-- models/
+   |-- model_<model>_<timestamp>_<best/last>.pt
+   |-- hyperparameters_<model>_<timestamp>.npz
+   |-- losses_<model>_<timestamp>.npz
+```
+* `<model>`: Name of the class defining the architecture.
+* `<timestamp>`: Execution timestamp.
+* `model_<model>_<timestamp>_<best/last>.pt`: Model weights.
+  * `best`: Weights that resulted in the lowest loss concerning the validation dataset.
+  * `last`: Weights that resulted in the last loss.
+* `hyperparameters_<model>_<timestamp>.npz`: Hyperparameters used to train the model.
+* `losses_<model>_<timestamp>.npz`: Evolution of training and validation loss.
+
+### Tests
+There are 5 result files:
+
+* `src/nn/results/cnn_all_results.ipynb`: Architectures aiming to estimate all statistics (c1, c2, L, epsilon).
+* `src/nn/training/cnn_c1_training.ipynb`: Architectures aiming to estimate c1.
+* `src/nn/training/cnn_c2_training.ipynb`: Architectures aiming to estimate c2.
+* `src/nn/training/cnn_L_training.ipynb`: Architectures aiming to estimate L.
+* `src/nn/training/cnn_epsilon_training.ipynb`: Architectures aiming to estimate epsilon.
+
+All these files can be opened in a Jupyter notebook.
+
+For example:
+```
+jupyter notebook src/nn/results/cnn_all_results.ipynb
+```
+Once opened, the builder, timestamp, and data_path fields must be filled to specify the training results to visualize.
+
+For example:
+
+```
+builder   = CNN_ALL_VDCNNFRW_M18
+timestamp = "2024_02_08__09_32_10"
+data_path = pctes.DATAPATH
+```
+`builder`: Class defining the architecture whose results will be analyzed.
+`timestamp`: Execution timestamp of the training. This can be identified at the time of training execution or in the filenames in data/models/.
+`data_path`: Relative data path. This path can also be specified from the following file:
+* `src/nn/path_ctes.py`
+```
+DATAPATH   = "../../../data/MRW.npz"
+SCALERPATH = "../../../data/scaler.joblib"
+```
+
+The most important results to visualize in this notebook are the following ones.
+
+#### Loss Plot
+#### Prediction Summary
+```
+Total Test MSE = 0.0138
+Test MSE for each output:
+c1: 0.0019
+c2: 0.0167
+L: 0.0286
+EPSILON: 0.0080
+```
+#### Prediction Distribution Plot
+#### Correlation Matrix of Predictions
