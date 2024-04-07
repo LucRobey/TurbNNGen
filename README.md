@@ -129,6 +129,8 @@ Note: Specify the relative route to the data in the J
 
 ## Neural Networks
 
+![Architecture](assets/architecture.png)
+
 All information regarding the definition, training, and evaluation of neural networks can be found in the following directories:
 ```
 src/
@@ -217,6 +219,9 @@ SCALERPATH = "../../../data/scaler.joblib"
 The most important results to visualize in this notebook are the following ones.
 
 #### Loss Plot
+
+![Losses](assets/losses.png)
+
 #### Prediction Summary
 ```
 Total Test MSE = 0.0138
@@ -227,4 +232,9 @@ L: 0.0286
 EPSILON: 0.0080
 ```
 #### Prediction Distribution Plot
+
+![Predictions](assets/predictions.png)
+
 #### Correlation Matrix of Predictions
+
+![CorrelationMatrix](assets/correlation_matrix.png)
